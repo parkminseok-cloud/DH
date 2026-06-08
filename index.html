@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>시린이 자가설문 | 대한치과보존학회</title>
+  <meta name="description" content="상아질 지각과민증(시린이) 자가설문지 - 20문항으로 나의 시린이 증상 정도를 확인해 보세요." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:  #16a34a;
+      --green-light: #dcfce7;
+      --amber:  #d97706;
+      --amber-light: #fef3c7;
+      --red:    #dc2626;
+      --red-light: #fee2e2;
+      --primary: #1e40af;
+      --primary-light: #dbeafe;
+      --gray-50:  #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --radius: 14px;
+      --shadow: 0 4px 24px rgba(0,0,0,.10);
+      --transition: .22s cubic-bezier(.4,0,.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+      min-height: 100vh;
+      color: var(--gray-900);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout ── */
+    .app {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 16px 16px 48px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header badge ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 99px;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: var(--gray-600);
+      font-weight: 500;
+      margin-bottom: 24px;
+      align-self: flex-start;
+    }
+    .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--primary); }
+
+    /* ── Card ── */
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Screens ── */
+    .screen { display: none; flex-direction: column; height: 100%; }
+    .screen.active { display: flex; }
+
+    /* ── Intro screen ── */
+    .intro-icon { font-size: 52px; text-align: center; margin-bottom: 16px; }
+    .intro-title {
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+    .intro-subtitle {
+      font-size: 14px;
+      color: var(--gray-600);
+      text-align: center;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    .info-box {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--primary);
+      line-height: 1.65;
+      margin-bottom: 24px;
+    }
+    .info-box strong { display: block; margin-bottom: 4px; font-size: 14px; }
+
+    /* Score bands in intro */
+    .band-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray-100);
+      font-size: 13px;
+    }
+    .band-row:last-child { border-bottom: none; }
+    .band-dot {
+      width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+    }
+    .band-label { font-weight: 600; min-width: 60px; }
+    .band-range { color: var(--gray-400); font-size: 12px; }
+
+    .btn-start {
+      margin-top: auto;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      width: 100%;
+      transition: background var(--transition), transform var(--transition);
+      letter-spacing: .3px;
+    }
+    .btn-start:active { transform: scale(.97); background: #1e3a8a; }
+
+    /* ── Progress bar ── */
+    .progress-wrap {
+      margin-bottom: 20px;
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .progress-label { color: var(--gray-600); font-weight: 500; }
+    .progress-num { color: var(--primary); font-weight: 700; }
+    .progress-bar-bg {
+      background: var(--gray-100);
+      border-radius: 99px;
+      height: 6px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      background: linear-gradient(90deg, var(--primary), #60a5fa);
+      height: 100%;
+      border-radius: 99px;
+      transition: width .4s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── Question screen ── */
+    .q-number {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 99px;
+      margin-bottom: 14px;
+      letter-spacing: .4px;
+    }
+    .q-text {
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.55;
+      color: var(--gray-900);
+      margin-bottom: 28px;
+      flex: 1;
+    }
+
+    /* ── Scale buttons ── */
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--gray-400);
+      margin-bottom: 8px;
+      padding: 0 2px;
+    }
+    .scale-btns {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-bottom: 28px;
+    }
+    .scale-btn {
+      aspect-ratio: 1;
+      border: 2px solid var(--gray-200);
+      border-radius: 10px;
+      background: white;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      color: var(--gray-600);
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .scale-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+    .scale-btn.selected {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: white;
+      transform: scale(1.08);
+      box-shadow: 0 3px 12px rgba(30,64,175,.35);
+    }
+
+    .scale-desc-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      margin-bottom: 28px;
+      color: var(--gray-400);
+    }
+
+    /* ── Nav buttons ── */
+    .nav-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: auto;
+    }
+    .btn-prev {
+      flex: 1;
+      background: var(--gray-100);
+      color: var(--gray-700);
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .btn-prev:active { background: var(--gray-200); }
+    .btn-next {
+      flex: 2;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+    }
+    .btn-next:active { background: #1e3a8a; transform: scale(.97); }
+    .btn-next:disabled {
+      background: var(--gray-200);
+      color: var(--gray-400);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── Result screen ── */
+    .result-icon { font-size: 56px; text-align: center; margin-bottom: 12px; }
+    .result-title {
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .result-score-wrap {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .result-score {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+    .result-score-label { font-size: 13px; color: var(--gray-400); }
+
+    .result-box {
+      border-radius: 12px;
+      padding: 18px 18px;
+      margin-bottom: 24px;
+      border: 2px solid;
+    }
+    .result-box.green  { background: var(--green-light);  border-color: var(--green);  color: #14532d; }
+    .result-box.amber  { background: var(--amber-light);  border-color: var(--amber);  color: #78350f; }
+    .result-box.red    { background: var(--red-light);    border-color: var(--red);    color: #7f1d1d; }
+
+    .result-box-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .result-box-desc {
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* ── Score bar ── */
+    .score-bar-wrap { margin-bottom: 24px; }
+    .score-bar-label {
+      font-size: 12px;
+      color: var(--gray-600);
+      margin-bottom: 6px;
+    }
+    .score-bar-track {
+      height: 12px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--green) 33.5%, var(--amber) 33.5% 67%, var(--red) 67%);
+      position: relative;
+      margin-bottom: 4px;
+    }
+    .score-bar-pointer {
+      position: absolute;
+      top: -4px;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 20px;
+      background: white;
+      border: 3px solid #1e40af;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,.2);
+      transition: left 1s cubic-bezier(.4,0,.2,1);
+    }
+    .score-bar-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--gray-400);
+      padding: 0 2px;
+    }
+
+    /* ── Tips section ── */
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tip-list { list-style: none; margin-bottom: 28px; }
+    .tip-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-100);
+      font-size: 14px;
+      color: var(--gray-700);
+      line-height: 1.6;
+    }
+    .tip-item:last-child { border-bottom: none; }
+    .tip-num {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
+    /* ── CTA link ── */
+    .cta-card {
+      background: linear-gradient(135deg, #1e40af, #1d4ed8);
+      border-radius: 14px;
+      padding: 22px 20px;
+      color: white;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .cta-icon { font-size: 28px; margin-bottom: 8px; }
+    .cta-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .cta-desc { font-size: 13px; opacity: .88; margin-bottom: 16px; line-height: 1.6; }
+    .cta-btn {
+      display: inline-block;
+      background: white;
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      padding: 11px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform var(--transition);
+    }
+    .cta-btn:active { transform: scale(.97); }
+
+    .btn-retry {
+      width: 100%;
+      background: var(--gray-100);
+      color: var(--gray-700);
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .btn-retry:active { background: var(--gray-200); }
+
+    /* ── Warning note ── */
+    .note {
+      font-size: 12px;
+      color: var(--gray-400);
+      text-align: center;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    /* ── Slide animation ── */
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .slide-in       { animation: slideIn .25s ease both; }
+    .slide-in-left  { animation: slideInLeft .25s ease both; }
+
+    @media (min-width: 480px) {
+      .app { padding-top: 32px; }
+      .q-text { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="badge">
+    <span class="badge-dot"></span>
+    대한치과보존학회 공식 자가설문지
+  </div>
+
+  <div class="card">
+
+    <!-- ── INTRO ── -->
+    <div class="screen active" id="screen-intro">
+      <div class="intro-icon">🦷</div>
+      <h1 class="intro-title">시린이 자가설문지</h1>
+      <p class="intro-subtitle">
+        상아질 지각과민증(시린이) 증상을 스스로 평가하는<br/>
+        20문항 자가설문입니다.<br/>약 3~5분 소요됩니다.
+      </p>
+
+      <div class="info-box">
+        <strong>📋 응답 방법</strong>
+        각 문항을 읽고, <strong>1(전혀 그렇지 않다)</strong>에서 <strong>7(매우 그렇다)</strong> 중<br/>
+        자신의 경험에 가장 가까운 숫자를 선택하세요.<br/>
+        "보통이다(4)"를 습관적으로 선택하지 말고,<br/>가능한 한 솔직하게 답해주세요.
+      </div>
+
+      <p style="font-size:13px;font-weight:600;color:var(--gray-600);margin-bottom:10px;">결과 해석 기준 (총점 20–140점)</p>
+      <div class="band-row">
+        <span class="band-dot" style="background:var(--green)"></span>
+        <span class="band-label" style="color:var(--green)">정상/경미</span>
+        <span class="band-range">20–47점</span>
+        <span style="font-size:12px;color:var(--gray-600);margin-left:auto">간헐적·가벼운 불편함</span>
+      </div>
+      <div class="band-row">
+        <span class="band-dot" style="background:var(--amber)"></span>
+        <span class="band-label" style="color:var(--amber)">중등도</span>
+        <span class="band-range">48–94점</span>
+        <span style="font-size:12px;color:var(--gray-600);margin-left:auto">빈번한 불편함</span>
+      </div>
+      <div class="band-row">
+        <span class="band-dot" style="background:var(--red)"></span>
+        <span class="band-label" style="color:var(--red)">심각</span>
+        <span class="band-range">95–140점</span>
+        <span style="font-size:12px;color:var(--gray-600);margin-left:auto">지속적·강한 불편함</span>
+      </div>
+
+      <div style="margin-top:24px;"></div>
+      <button class="btn-start" onclick="startQuiz()">답변 시작하기 →</button>
+    </div>
+
+    <!-- ── QUESTION ── -->
+    <div class="screen" id="screen-question">
+      <div class="progress-wrap">
+        <div class="progress-header">
+          <span class="progress-label" id="progress-label">1 / 20</span>
+          <span class="progress-num" id="progress-pct">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <span class="q-number" id="q-number">문항 1</span>
+      <p class="q-text" id="q-text"></p>
+
+      <div class="scale-labels">
+        <span>전혀 그렇지 않다</span>
+        <span>매우 그렇다</span>
+      </div>
+      <div class="scale-btns" id="scale-btns"></div>
+      <div class="scale-desc-bar">
+        <span>① 전혀 그렇지 않다</span>
+        <span>④ 보통</span>
+        <span>⑦ 매우 그렇다</span>
+      </div>
+
+      <div class="nav-btns">
+        <button class="btn-prev" id="btn-prev" onclick="prevQ()">← 이전</button>
+        <button class="btn-next" id="btn-next" onclick="nextQ()" disabled>다음 →</button>
+      </div>
+    </div>
+
+    <!-- ── RESULT ── -->
+    <div class="screen" id="screen-result">
+      <div class="result-icon" id="result-icon">🎉</div>
+      <div class="result-score-wrap">
+        <div class="result-score" id="result-score">—</div>
+        <div class="result-score-label">/ 140점</div>
+      </div>
+
+      <div class="result-box" id="result-box">
+        <div class="result-box-title" id="result-box-title"></div>
+        <div class="result-box-desc" id="result-box-desc"></div>
+      </div>
+
+      <div class="score-bar-wrap">
+        <div class="score-bar-label">내 점수 위치</div>
+        <div class="score-bar-track">
+          <div class="score-bar-pointer" id="score-pointer" style="left:0%"></div>
+        </div>
+        <div class="score-bar-ticks">
+          <span>20</span>
+          <span>47</span>
+          <span>94</span>
+          <span>140</span>
+        </div>
+      </div>
+
+      <p class="note">
+        이 결과는 환자의 주관적 경험을 측정하는 참고용이며,<br/>최종 진단이 아닙니다. 중등도 이상인 경우 치과의사의<br/>임상검사를 통한 정확한 진단을 권장합니다.
+      </p>
+
+      <!-- 8 Tips -->
+      <div class="section-title">💡 시린이 자가개선을 위한 8가지</div>
+      <ul class="tip-list">
+        <li class="tip-item"><span class="tip-num">1</span><span>이가 시린 증상이 치아와 잇몸 경계부(치경부) 상아세관 자극으로 발생한다는 것을 이해한다.</span></li>
+        <li class="tip-item"><span class="tip-num">2</span><span>차가운 물을 마실 때 어느 정도 시린 것은 치아 신경의 정상 감각임을 안다.</span></li>
+        <li class="tip-item"><span class="tip-num">3</span><span>나이가 들면서 잇몸이 내려가 치아 뿌리 쪽이 노출되면 시린 증상이 더 생길 수 있음을 안다.</span></li>
+        <li class="tip-item"><span class="tip-num">4</span><span>시린이 개선을 위해 치태(플라크) 관리의 중요성을 인식한다.</span></li>
+        <li class="tip-item"><span class="tip-num">5</span><span>칫솔질을 구석구석 섬세하게 하여 치태를 효과적으로 제거한다.</span></li>
+        <li class="tip-item"><span class="tip-num">6</span><span>시린이 전용 치약을 꾸준히 사용한다.</span></li>
+        <li class="tip-item"><span class="tip-num">7</span><span>증상 개선을 위해 치과를 정기적으로 방문한다.</span></li>
+        <li class="tip-item"><span class="tip-num">8</span><span>심한 경우 치과에서 전문가 도포 등 적극적 치료를 받을 수 있음을 안다.</span></li>
+      </ul>
+
+      <!-- CTA -->
+      <div class="cta-card" id="cta-section">
+        <div class="cta-icon">🏥</div>
+        <div class="cta-title">치과보존과 전문의 찾기</div>
+        <div class="cta-desc">
+          중등도 또는 심각한 지각과민 범주라면<br/>
+          치과보존과 전문의의 정확한 진단을 받아보세요.
+        </div>
+        <a class="cta-btn" href="https://www.kacd.or.kr/hospital/search.php" target="_blank" rel="noopener">
+          전문의 찾아보기 →
+        </a>
+      </div>
+
+      <button class="btn-retry" onclick="retryQuiz()">↺ 다시 답변하기</button>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /app -->
+
+<script>
+  const QUESTIONS = [
+    "이가 시린 증상이 자주 발생합니다.",
+    "이가 시린 증상이 오래 지속됩니다.",
+    "이가 시릴 때 통증이 심하게 느껴집니다.",
+    "이가 시린 증상이 갑자기 발생하곤 합니다.",
+    "이가 시린 증상 때문에 스트레스를 받습니다.",
+    "이가 시린 증상으로 인해 칫솔질이 불편합니다.",
+    "이가 시린 증상 때문에 치과 방문이 꺼려집니다.",
+    "이가 시린 증상으로 칫솔질 시간을 짧게 하게 됩니다.",
+    "이가 시린 증상 때문에 타인의 시선이 신경 쓰입니다.",
+    "이가 시린 증상으로 인해 일상생활에 지장이 있습니다.",
+    "이가 시린 증상으로 인해 사회 활동에 영향을 받습니다.",
+    "이가 시린 증상으로 인해 자주 치과를 방문하게 됩니다.",
+    "이가 시린 증상 때문에 입 안을 헹구는 것이 불편합니다.",
+    "이가 시린 증상 때문에 삶의 질이 떨어진 것처럼 느낍니다.",
+    "이가 시린 증상으로 인해 식사 시간이 불편하게 느껴집니다.",
+    "이가 시린 증상으로 혀나 손톱 등으로 해당 부위를 건드립니다.",
+    "이가 시린 증상 때문에 차가운 공기를 마시는 것이 꺼려집니다.",
+    "이가 시린 증상 때문에 타인과의 대화나 상호작용이 불편합니다.",
+    "이가 시린 증상 때문에 미래의 치아 상태에 대해 불안감을 느낍니다.",
+    "이가 시린 증상으로 인해 특정 차가운 음식이나 음료를 즐기기 어렵습니다."
+  ];
+
+  const SCALE_LABELS = [
+    "전혀 그렇지 않다",
+    "그렇지 않다",
+    "약간 그렇지 않다",
+    "보통이다",
+    "약간 그렇다",
+    "그렇다",
+    "매우 그렇다"
+  ];
+
+  let answers = new Array(QUESTIONS.length).fill(null);
+  let current = 0;
+  let direction = 1; // 1 = forward, -1 = backward
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function startQuiz() {
+    current = 0;
+    answers = new Array(QUESTIONS.length).fill(null);
+    renderQuestion();
+    showScreen('screen-question');
+  }
+
+  function renderQuestion() {
+    const q = QUESTIONS[current];
+    const n = current + 1;
+    const total = QUESTIONS.length;
+    const pct = Math.round((current / total) * 100);
+
+    document.getElementById('q-number').textContent = `문항 ${n}`;
+    document.getElementById('q-text').textContent = q;
+    document.getElementById('progress-label').textContent = `${n} / ${total}`;
+    document.getElementById('progress-pct').textContent = `${pct}%`;
+    document.getElementById('progress-fill').style.width = `${pct}%`;
+
+    const container = document.getElementById('scale-btns');
+    container.innerHTML = '';
+    for (let v = 1; v <= 7; v++) {
+      const btn = document.createElement('button');
+      btn.className = 'scale-btn' + (answers[current] === v ? ' selected' : '');
+      btn.textContent = v;
+      btn.title = SCALE_LABELS[v - 1];
+      btn.addEventListener('click', () => selectAnswer(v));
+      container.appendChild(btn);
+    }
+
+    const nextBtn = document.getElementById('btn-next');
+    nextBtn.disabled = answers[current] === null;
+    nextBtn.textContent = current === total - 1 ? '결과 보기 ✓' : '다음 →';
+
+    document.getElementById('btn-prev').style.visibility = current === 0 ? 'hidden' : 'visible';
+
+    // Slide animation
+    const qScreen = document.getElementById('screen-question');
+    qScreen.classList.remove('slide-in', 'slide-in-left');
+    void qScreen.offsetWidth; // reflow
+    qScreen.classList.add(direction === 1 ? 'slide-in' : 'slide-in-left');
+  }
+
+  function selectAnswer(value) {
+    answers[current] = value;
+    const btns = document.querySelectorAll('.scale-btn');
+    btns.forEach((btn, i) => {
+      btn.classList.toggle('selected', i + 1 === value);
+    });
+    document.getElementById('btn-next').disabled = false;
+
+    // Auto-advance after short delay if not last question
+    if (current < QUESTIONS.length - 1) {
+      setTimeout(() => {
+        if (answers[current] !== null) nextQ();
+      }, 320);
+    }
+  }
+
+  function nextQ() {
+    if (answers[current] === null) return;
+    direction = 1;
+    if (current < QUESTIONS.length - 1) {
+      current++;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function prevQ() {
+    if (current === 0) return;
+    direction = -1;
+    current--;
+    renderQuestion();
+  }
+
+  function showResult() {
+    const score = answers.reduce((sum, v) => sum + (v || 0), 0);
+
+    let band, icon, title, desc, cls;
+    if (score <= 47) {
+      band = 'green';
+      icon = '😊';
+      title = '정상 범주 / 경미한 지각과민';
+      desc = `총점 ${score}점으로 정상 또는 경미한 지각과민 범주입니다.\n간헐적이고 가벼운 불편함이 있을 수 있으나, 일상생활에 미치는 영향은 적습니다.\n꾸준한 구강 관리와 정기 검진을 유지하세요.`;
+    } else if (score <= 94) {
+      band = 'amber';
+      icon = '😐';
+      title = '중등도 지각과민';
+      desc = `총점 ${score}점으로 중등도 지각과민 범주입니다.\n빈번한 불편함이 있으며, 일상생활에 어느 정도 영향을 미칩니다.\n시린이 전용 치약 사용, 꼼꼼한 칫솔질과 함께\n치과의사의 임상검사를 통한 치료 계획 수립을 권장합니다.`;
+    } else {
+      band = 'red';
+      icon = '😣';
+      title = '심각한 지각과민';
+      desc = `총점 ${score}점으로 심각한 지각과민 범주입니다.\n지속적이고 강한 불편함이 있으며, 삶의 질에 현저한 영향을 줍니다.\n빠른 시일 내에 치과보존과 전문의를 방문하여\n정확한 진단과 적극적인 치료를 받으시기 바랍니다.`;
+    }
+
+    document.getElementById('result-icon').textContent = icon;
+    document.getElementById('result-score').textContent = score;
+    document.getElementById('result-score').style.color =
+      band === 'green' ? 'var(--green)' : band === 'amber' ? 'var(--amber)' : 'var(--red)';
+
+    const box = document.getElementById('result-box');
+    box.className = `result-box ${band}`;
+    document.getElementById('result-box-title').textContent = title;
+    document.getElementById('result-box-desc').innerHTML = desc.replace(/\n/g, '<br/>');
+
+    // Score bar pointer position: map score 20-140 to 0-100%
+    const ptr = Math.min(100, Math.max(0, ((score - 20) / 120) * 100));
+    setTimeout(() => {
+      document.getElementById('score-pointer').style.left = `${ptr}%`;
+    }, 200);
+
+    // Show CTA only for amber/red
+    document.getElementById('cta-section').style.display = band === 'green' ? 'none' : 'block';
+
+    showScreen('screen-result');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function retryQuiz() {
+    answers = new Array(QUESTIONS.length).fill(null);
+    current = 0;
+    direction = 1;
+    showScreen('screen-intro');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Keyboard support
+  document.addEventListener('keydown', (e) => {
+    const qScreen = document.getElementById('screen-question');
+    if (!qScreen.classList.contains('active')) return;
+    const key = parseInt(e.key);
+    if (key >= 1 && key <= 7) selectAnswer(key);
+    if (e.key === 'ArrowRight' || e.key === 'Enter') { if (answers[current] !== null) nextQ(); }
+    if (e.key === 'ArrowLeft') prevQ();
+  });
+</script>
+</body>
+</html>
